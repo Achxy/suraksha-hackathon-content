@@ -1,0 +1,66 @@
+name: Publish Storybook Package
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: publish-storybook-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    env:
+      ARTIFACT_NAME: hackathon-storybooks-${{ github.run_id }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build-package
+
+      - name: Upload Storybook package artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: dist-package
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Dispatch hosting repo
+        env:
+          HOSTING_REPO: ${{ vars.HOSTING_REPO || 'Achxy/deliverables-of-achyuth-dev' }}
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.HOSTING_REPO_DISPATCH_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "https://api.github.com/repos/${HOSTING_REPO}/dispatches" \
+            -d @- << JSON
+          {
+            "event_type": "storybook-package-ready",
+            "client_payload": {
+              "schemaVersion": 1,
+              "sourceRepo": "${{ github.repository }}",
+              "sourceRunId": "${{ github.run_id }}",
+              "sourceSha": "${{ github.sha }}",
+              "artifactName": "${{ env.ARTIFACT_NAME }}"
+            }
+          }
+          JSON

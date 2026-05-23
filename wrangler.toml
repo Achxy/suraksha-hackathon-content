@@ -1,0 +1,7 @@
+name = "hackathon-storybook-deployer"
+compatibility_date = "2026-05-16"
+account_id = "db86e4aa6e14b7fd2778c4c815b9764a"
+
+[[r2_buckets]]
+binding = "JUST_CDN"
+bucket_name = "just-cdn"

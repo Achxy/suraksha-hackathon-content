@@ -1,0 +1,26 @@
+import{j as e}from"./jsx-runtime-D_zvdyIk.js";import{useMDXComponents as s}from"./index-CSke7xmO.js";import{a as r,S as l}from"./index-a3vgbyrR.js";import"./index-CEK5zJnf.js";import"./iframe-k6SGULGi.js";import"./index-CupGaPSm.js";import"./index-B3ijS-tw.js";import"./index-DrFu-skq.js";function t(i){const n={h1:"h1",h2:"h2",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...s(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(r,{title:"Introduction"}),`
+`,e.jsx(n.h1,{id:"suraksha---real-time-anomaly-detection",children:"SuRaksha - Real-time Anomaly Detection"}),`
+`,e.jsx(n.p,{children:"Detect tampering in land records, legal documents, and financial statements in real-time."}),`
+`,e.jsx(n.h2,{id:"what-youll-build",children:"What You'll Build"}),`
+`,e.jsxs(n.ul,{children:[`
+`,e.jsx(n.li,{children:"A document analysis pipeline that detects forged fields"}),`
+`,e.jsx(n.li,{children:"Real-time comparison of submitted vs. original documents"}),`
+`,e.jsx(n.li,{children:"Intelligent risk scoring for underwriting decisions"}),`
+`,e.jsx(n.li,{children:"Interactive investigation dashboard"}),`
+`]}),`
+`,e.jsx(n.h2,{id:"prerequisites",children:"Prerequisites"}),`
+`,e.jsxs(n.ul,{children:[`
+`,e.jsx(n.li,{children:"Basic knowledge of React and TypeScript"}),`
+`,e.jsx(n.li,{children:"Familiarity with Elastic UI components"}),`
+`,e.jsx(n.li,{children:"Understanding of document verification workflows"}),`
+`]}),`
+`,e.jsx(n.h2,{id:"exercise-flow",children:"Exercise Flow"}),`
+`,e.jsxs(n.ol,{children:[`
+`,e.jsxs(n.li,{children:[e.jsx(n.strong,{children:"Document Ingestion"})," - Load and parse documents"]}),`
+`,e.jsxs(n.li,{children:[e.jsx(n.strong,{children:"Field Extraction"})," - Extract key fields using OCR simulation"]}),`
+`,e.jsxs(n.li,{children:[e.jsx(n.strong,{children:"Tamper Detection"})," - Compare extracted vs. expected values"]}),`
+`,e.jsxs(n.li,{children:[e.jsx(n.strong,{children:"Risk Assessment"})," - Score documents based on tamper evidence"]}),`
+`,e.jsxs(n.li,{children:[e.jsx(n.strong,{children:"Reporting"})," - Generate investigation reports"]}),`
+`]}),`
+`,e.jsx(n.h2,{id:"getting-started",children:"Getting Started"}),`
+`,e.jsxs(n.p,{children:["Begin with the ",e.jsx(l,{id:"example-checklist--default"})," story to see a working example."]})]})}function u(i={}){const{wrapper:n}={...s(),...i.components};return n?e.jsx(n,{...i,children:e.jsx(t,{...i})}):t(i)}export{u as default};
