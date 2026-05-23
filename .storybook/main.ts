@@ -20,6 +20,9 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  features: {
+    hideFrameworkChrome: true,
+  },
   staticDirs,
   viteFinal: async (config) => {
     config.base = "./";
