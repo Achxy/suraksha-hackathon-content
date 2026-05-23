@@ -64,3 +64,14 @@ jobs:
             }
           }
           JSON
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx vercel deploy dist-package \
+            --token "${{ secrets.VERCEL_TOKEN }}" \
+            --prebuilt \
+            --yes \
+            2>&1
