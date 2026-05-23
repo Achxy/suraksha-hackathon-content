@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "suraksha-anomaly",
+  "id": "suraksha-anomaly-detection",
   "title": "SuRaksha - Real-time Anomaly Detection",
   "routeParts": ["hackathons", "suraksha", "anomaly-detection", "1a2b3c4d5e6f7g8h"],
   "sourceDir": "parts/part-1"

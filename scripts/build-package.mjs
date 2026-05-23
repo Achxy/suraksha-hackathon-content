@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, mkdirSync, writeFileSync, rmSync, cpSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { existsSync, readFileSync, mkdirSync, writeFileSync, rmSync, cpSync, readdirSync, statSync } from "node:fs";
+import { join, resolve, relative } from "node:path";
 import { execSync } from "node:child_process";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -14,6 +14,60 @@ function discoverParts() {
     encoding: "utf-8",
   });
   return JSON.parse(raw);
+}
+
+function assertStorybookBuild(dir) {
+  const files = [];
+  function walk(d) {
+    const entries = readdirSync(d, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = join(d, entry.name);
+      if (entry.isSymbolicLink()) {
+        throw new Error(`Symlink rejected in build output: ${full}`);
+      }
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.isFile()) {
+        files.push(full);
+      }
+    }
+  }
+  walk(dir);
+
+  const rel = files.map((f) => relative(dir, f));
+
+  if (!rel.includes("index.html")) {
+    throw new Error(`Missing index.html in ${dir}`);
+  }
+
+  if (rel.length < 5) {
+    throw new Error(
+      `Invalid Storybook build: expected full static directory, got only ${rel.length} files in ${dir}`
+    );
+  }
+
+  const hasJs = rel.some((f) => f.endsWith(".js"));
+  const hasIframe = rel.includes("iframe.html");
+  const hasStorybookMeta = rel.some(
+    (f) =>
+      f === "index.json" ||
+      f === "project.json" ||
+      f.startsWith("sb-preview/") ||
+      f.startsWith("sb-manager/") ||
+      f.startsWith("assets/")
+  );
+
+  if (!hasJs) {
+    throw new Error(`Invalid Storybook build: no JS assets in ${dir}`);
+  }
+
+  if (!hasIframe && !hasStorybookMeta) {
+    throw new Error(
+      `Invalid Storybook build: does not look like a full Storybook static export in ${dir}`
+    );
+  }
+
+  console.log(`  Validated: ${rel.length} files, ${hasIframe ? "has iframe, " : ""}${hasJs ? "has JS, " : ""}has metadata`);
 }
 
 function buildPackage() {
@@ -38,14 +92,7 @@ function buildPackage() {
     const indexPath = join(storybookDir, "index.html");
     const iframePath = join(storybookDir, "iframe.html");
 
-    if (!existsSync(indexPath)) {
-      console.error(`Missing: ${indexPath}`);
-      process.exit(1);
-    }
-    if (!existsSync(iframePath)) {
-      console.error(`Missing: ${iframePath}`);
-      process.exit(1);
-    }
+    assertStorybookBuild(storybookDir);
 
     const indexContent = readFileSync(indexPath, "utf-8");
     const iframeContent = readFileSync(iframePath, "utf-8");
